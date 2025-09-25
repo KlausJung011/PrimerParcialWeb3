@@ -41,7 +41,7 @@ namespace PrimerParcial.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("PrimerParcial.Models.Ingredient", b =>
@@ -67,7 +67,7 @@ namespace PrimerParcial.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("PrimerParcial.Models.Recipe", b =>
@@ -107,7 +107,7 @@ namespace PrimerParcial.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("PrimerParcial.Models.Ingredient", b =>

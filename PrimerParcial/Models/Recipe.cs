@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using System.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PrimerParcial.Models
 {
@@ -22,6 +26,8 @@ namespace PrimerParcial.Models
         public int PreparationTimeMinutes { get; set; }
 
         public int Servings { get; set; }
+
+        // --- Relaciones de Entity Framework Core ---
 
         // Clave Foránea (FK): Vincula esta receta a la categoría
         public int CategoryId { get; set; }
