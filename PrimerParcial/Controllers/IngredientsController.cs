@@ -8,25 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using PrimerParcial.Data;
 using PrimerParcial.Models;
 
-namespace PrimerParcial.Views
+namespace PrimerParcial.Controllers
 {
-    public class RecipesController : Controller
+    public class IngredientsController : Controller
     {
         private readonly RecetasDBContext _context;
 
-        public RecipesController(RecetasDBContext context)
+        public IngredientsController(RecetasDBContext context)
         {
             _context = context;
         }
 
-        // GET: Recipes
+        // GET: Ingredients
         public async Task<IActionResult> Index()
         {
-            var recetasDBContext = _context.Recipes.Include(r => r.Category);
+            var recetasDBContext = _context.Ingredients.Include(i => i.Recipe);
             return View(await recetasDBContext.ToListAsync());
         }
 
-        // GET: Recipes/Details/5
+        // GET: Ingredients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,42 @@ namespace PrimerParcial.Views
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .Include(r => r.Category)
+            var ingredient = await _context.Ingredients
+                .Include(i => i.Recipe)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (recipe == null)
+            if (ingredient == null)
             {
                 return NotFound();
             }
 
-            return View(recipe);
+            return View(ingredient);
         }
 
-        // GET: Recipes/Create
+        // GET: Ingredients/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Description");
             return View();
         }
 
-        // POST: Recipes/Create
+        // POST: Ingredients/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,DateCreated,Description,Instructions,PreparationTimeMinutes,Servings,CategoryId")] Recipe recipe)
+        public async Task<IActionResult> Create([Bind("Id,Name,Quantity,RecipeId")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(recipe);
+                _context.Add(ingredient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
+            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Description", ingredient.RecipeId);
+            return View(ingredient);
         }
 
-        // GET: Recipes/Edit/5
+        // GET: Ingredients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +77,23 @@ namespace PrimerParcial.Views
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes.FindAsync(id);
-            if (recipe == null)
+            var ingredient = await _context.Ingredients.FindAsync(id);
+            if (ingredient == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
+            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Description", ingredient.RecipeId);
+            return View(ingredient);
         }
 
-        // POST: Recipes/Edit/5
+        // POST: Ingredients/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DateCreated,Description,Instructions,PreparationTimeMinutes,Servings,CategoryId")] Recipe recipe)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Quantity,RecipeId")] Ingredient ingredient)
         {
-            if (id != recipe.Id)
+            if (id != ingredient.Id)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace PrimerParcial.Views
             {
                 try
                 {
-                    _context.Update(recipe);
+                    _context.Update(ingredient);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecipeExists(recipe.Id))
+                    if (!IngredientExists(ingredient.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +118,11 @@ namespace PrimerParcial.Views
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", recipe.CategoryId);
-            return View(recipe);
+            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Description", ingredient.RecipeId);
+            return View(ingredient);
         }
 
-        // GET: Recipes/Delete/5
+        // GET: Ingredients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +130,35 @@ namespace PrimerParcial.Views
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .Include(r => r.Category)
+            var ingredient = await _context.Ingredients
+                .Include(i => i.Recipe)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (recipe == null)
+            if (ingredient == null)
             {
                 return NotFound();
             }
 
-            return View(recipe);
+            return View(ingredient);
         }
 
-        // POST: Recipes/Delete/5
+        // POST: Ingredients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
-            if (recipe != null)
+            var ingredient = await _context.Ingredients.FindAsync(id);
+            if (ingredient != null)
             {
-                _context.Recipes.Remove(recipe);
+                _context.Ingredients.Remove(ingredient);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RecipeExists(int id)
+        private bool IngredientExists(int id)
         {
-            return _context.Recipes.Any(e => e.Id == id);
+            return _context.Ingredients.Any(e => e.Id == id);
         }
     }
 }

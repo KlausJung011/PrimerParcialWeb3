@@ -33,9 +33,9 @@ namespace PrimerParcial.Models
         public int CategoryId { get; set; }
 
         // Propiedad de Navegación: El lado 'uno'
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         // Propiedad de Navegación: El lado 'muchos' para las Recetas en esta Categoría
-        public ICollection<Ingredient> Ingredients { get; set; }
+        public ICollection<Ingredient>? Ingredients { get; set; }
     }
 }
